@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Catálogo digital interactivo - Navegación fluida y minimalista">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Catálogo</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Portada -->
+    <div id="cover" class="cover" role="banner" aria-label="Portada del catálogo">
+        <div class="cover__bg"></div>
+        <div class="cover__glass">
+            <div class="cover__content">
+                <span class="cover__overline">Bienvenido a</span>
+                <h1 id="businessName" class="cover__title">Mi Catálogo</h1>
+                <div class="cover__divider"></div>
+                <p id="businessTagline" class="cover__tagline">Descubre nuestra colección</p>
+            </div>
+            <div class="cover__hint" aria-hidden="true">
+                <span class="cover__hint-text">Desliza para descubrir</span>
+                <svg class="cover__hint-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+                    <path d="M12 5v14M5 12l7 7 7-7"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visor del catálogo -->
+    <div id="viewer" class="viewer hidden" role="main" aria-label="Visor de catálogo">
+        <!-- Imagen de fondo con blur -->
+        <div class="viewer__blur-bg" aria-hidden="true"></div>
+
+        <!-- Contenedor de imagen principal -->
+        <div class="viewer__stage">
+            <div class="viewer__image-wrapper">
+                <img id="mainImage" class="viewer__image" src="" alt="Producto" draggable="false">
+            </div>
+
+            <!-- Botones de navegación -->
+            <button id="prevBtn" class="viewer__nav viewer__nav--prev" aria-label="Imagen anterior" title="Anterior">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"/>
+                </svg>
+            </button>
+            <button id="nextBtn" class="viewer__nav viewer__nav--next" aria-label="Imagen siguiente" title="Siguiente">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Pie con indicadores -->
+        <div class="viewer__footer">
+            <div class="viewer__dots" id="dotsContainer" role="tablist" aria-label="Indicador de imágenes"></div>
+            <span id="imageCounter" class="viewer__counter">1 / 1</span>
+        </div>
+
+        <!-- Botón volver a portada -->
+        <button id="homeBtn" class="viewer__home-btn" aria-label="Volver a la portada" title="Inicio">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Mensaje de estado (sin imágenes, error de carga) -->
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
