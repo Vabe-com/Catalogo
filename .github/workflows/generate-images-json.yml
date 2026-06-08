@@ -1,0 +1,63 @@
+name: Generate Images JSON
+
+on:
+  push:
+    paths:
+      - 'images/**'
+      - '!images.json'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Generate images.json from /images folder
+        run: |
+          cd images
+          # Buscar todos los archivos de imagen (extensiones comunes + SVG + AVIF)
+          shopt -s nullglob
+          image_files=(*.webp *.jpg *.jpeg *.png *.svg *.gif *.avif *.bmp)
+          shopt -u nullglob
+
+          # Ordenar alfabéticamente
+          IFS=$'\n' sorted=($(sort <<<"${image_files[*]}"))
+          unset IFS
+
+          # Construir JSON
+          echo "[" > ../images.json
+          first=true
+          for f in "${sorted[@]}"; do
+            if [ "$first" = true ]; then
+              first=false
+            else
+              echo "," >> ../images.json
+            fi
+            # Escapar caracteres especiales mínimos para JSON
+            escaped=$(echo "$f" | sed 's/\\/\\\\/g; s/"/\\"/g')
+            echo "  \"$escaped\"" >> ../images.json
+          done
+          echo "]" >> ../images.json
+
+          echo "✅ Generated images.json with ${#sorted[@]} images"
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add images.json
+          if git diff --staged --quiet; then
+            echo "No changes to images.json — skipping commit"
+          else
+            git commit -m "🖼 Auto-update images.json [skip ci]"
+            git push
+            echo "🚀 Pushed updated images.json"
+          fi
